@@ -120,11 +120,34 @@ class Request implements IRequest
 
     /**
      * Return uploaded files
-     * @return IUploadedFile[]
+     * @return array
      */
     public function getUploadedFiles(): array
     {
-        // TODO: Implement getUploadedFiles() method.
+        $result = [];
+        foreach ($_FILES as $name => $data) {
+            if (is_array($data['name'])) {
+                foreach ($this->diverseArray($data) as $file) {
+                    $result[$name][] = new UploadedFile($file);
+                }
+            } else {
+                $result[$name] = new UploadedFile($data);
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * @param $vector
+     * @return array
+     */
+    private function diverseArray($vector)
+    {
+        $result = [];
+        foreach ($vector as $key1 => $value1)
+            foreach ($value1 as $key2 => $value2)
+                $result[$key2][$key1] = $value2;
+        return $result;
     }
 
     /**
