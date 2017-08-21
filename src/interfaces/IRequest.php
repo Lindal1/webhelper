@@ -26,6 +26,22 @@ interface IRequest
     public function get(string $name, mixed $default = null): mixed;
 
     /**
+     * Set GET param to request
+     * @param string $name
+     * @param string $value
+     * @return IRequest
+     */
+    public function setGetParam(string $name, string $value): IRequest;
+
+    /**
+     * Set POST PARAM to request
+     * @param string $name
+     * @param string $value
+     * @return IRequest
+     */
+    public function setPostParam(string $name, string $value): IRequest;
+
+    /**
      * Return POST param by name
      * @param string $name
      * @param mixed|null $default Return this value if param doesn't exist
@@ -41,9 +57,9 @@ interface IRequest
 
     /**
      * Return uploaded files
-     * @return IUploadedFile
+     * @return IUploadedFile[]
      */
-    public function getUploadedFiles(): IUploadedFile;
+    public function getUploadedFiles(): array;
 
     /**
      * Check is GET request

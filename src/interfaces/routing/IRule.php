@@ -14,4 +14,6 @@ interface IRule
 
     public function getHandler(): string;
 
+    public function extractParams(string $uri): array;
+
 }

@@ -36,4 +36,10 @@ interface IUploadedFile
      */
     public function getTmp(): string;
 
+    /**
+     * Return file type
+     * @return string
+     */
+    public function getType(): string;
+
 }

@@ -4,10 +4,16 @@ namespace webhelper\interfaces\routing;
 
 
 use webhelper\errors\NotFoundException;
+use webhelper\interfaces\IRequest;
 
 interface IRouter
 {
-    public function __construct(array $rules = []);
+    /**
+     * IRouter constructor.
+     * @param IRule[] $rules
+     * @param IRequest $request
+     */
+    public function __construct(array $rules = [], IRequest $request);
 
     /**
      * Set rule for default uri
@@ -21,12 +27,11 @@ interface IRouter
      * @param IRule $rule
      * @return IRouter
      */
-    public function setRule(IRule $rule): IRouter;
+    public function addRule(IRule $rule): IRouter;
 
     /**
-     * @param string $uri
-     * @param string $method
+     * @throws NotFoundException
      * @return mixed
      */
-    public function execute(string $uri, string $method);
+    public function execute();
 }

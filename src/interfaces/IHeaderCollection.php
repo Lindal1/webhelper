@@ -6,10 +6,12 @@ interface IHeaderCollection
 {
 
     /**
-     * IHeaderCollection constructor.
-     * @param array $headers
+     * Add header to collection
+     * @param string $name
+     * @param string $value
+     * @return IHeaderCollection
      */
-    public function __construct(array $headers);
+    public function add(string $name, string $value): IHeaderCollection;
 
     /**
      * Return header value by name or null if header doesn't exist
