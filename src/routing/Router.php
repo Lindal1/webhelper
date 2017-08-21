@@ -1,11 +1,11 @@
 <?php
 
-namespace webhelper\routing;
+namespace lindal\webhelper\routing;
 
-use webhelper\errors\NotFoundException;
-use webhelper\interfaces\IRequest;
-use webhelper\interfaces\routing\IRouter;
-use webhelper\interfaces\routing\IRule;
+use lindal\webhelper\errors\NotFoundException;
+use lindal\webhelper\interfaces\IRequest;
+use lindal\webhelper\interfaces\routing\IRouter;
+use lindal\webhelper\interfaces\routing\IRule;
 
 /**
  * Created by PhpStorm.
@@ -71,6 +71,9 @@ class Router implements IRouter
     public function execute()
     {
         foreach ($this->_rules as $rule) {
+            if ($rule->getMethod() != $this->_request->getMethod()) {
+                continue;
+            }
             if ($this->match($this->_request->getUri(), $this->_request->getMethod())) {
                 $params = $rule->extractParams($this->_request->getUri());
                 foreach ((array)$params as $name => $value) {

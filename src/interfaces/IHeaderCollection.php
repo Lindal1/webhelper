@@ -1,6 +1,6 @@
 <?php
 
-namespace webhelper\interfaces;
+namespace lindal\webhelper\interfaces;
 
 interface IHeaderCollection
 {

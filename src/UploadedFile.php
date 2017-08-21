@@ -6,10 +6,10 @@
  * Time: 18:28
  */
 
-namespace webhelper;
+namespace lindal\webhelper;
 
 
-use webhelper\interfaces\IUploadedFile;
+use lindal\webhelper\interfaces\IUploadedFile;
 
 class UploadedFile implements IUploadedFile
 {

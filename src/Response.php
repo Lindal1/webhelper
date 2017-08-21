@@ -6,11 +6,11 @@
  * Time: 18:16
  */
 
-namespace webhelper;
+namespace lindal\webhelper;
 
 
-use webhelper\interfaces\IHeaderCollection;
-use webhelper\interfaces\IResponse;
+use lindal\webhelper\interfaces\IHeaderCollection;
+use lindal\webhelper\interfaces\IResponse;
 
 class Response implements IResponse
 {

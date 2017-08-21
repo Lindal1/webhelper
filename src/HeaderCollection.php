@@ -1,15 +1,8 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lindal
- * Date: 21.08.17
- * Time: 18:08
- */
 
-namespace webhelper;
+namespace lindal\webhelper;
 
-
-use webhelper\interfaces\IHeaderCollection;
+use lindal\webhelper\interfaces\IHeaderCollection;
 
 class HeaderCollection implements IHeaderCollection
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace webhelper;
+namespace lindal\webhelper;
 
-use webhelper\interfaces\IHeaderCollection;
-use webhelper\interfaces\IRequest;
-use webhelper\interfaces\IUploadedFile;
+use lindal\webhelper\interfaces\IHeaderCollection;
+use lindal\webhelper\interfaces\IRequest;
+use lindal\webhelper\interfaces\IUploadedFile;
 
 /**
  * Created by PhpStorm.

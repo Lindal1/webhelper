@@ -1,6 +1,6 @@
 <?php
 
-namespace webhelper\errors;
+namespace lindal\webhelper\errors;
 
 use Throwable;
 

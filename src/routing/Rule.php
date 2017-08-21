@@ -6,10 +6,10 @@
  * Time: 19:07
  */
 
-namespace webhelper\routing;
+namespace lindal\webhelper\routing;
 
 
-use webhelper\interfaces\routing\IRule;
+use lindal\webhelper\interfaces\routing\IRule;
 
 class Rule implements IRule
 {
@@ -34,24 +34,58 @@ class Rule implements IRule
         $this->_method = $method;
     }
 
-    public function match(string $uri, string $method)
+    /**
+     * @inheritdoc
+     */
+    public function match(string $uri)
     {
-        $regexp = preg_replace('/{.*}/', '.+', $this->_pattern);
-
+        $regexp = preg_replace('/{[a-z]+}/', '.+', $this->_pattern);
+        $regexp = str_replace('/', '\/', $regexp);
+        return (bool)preg_match('/' . $regexp . '/', $uri);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getClass(): string
     {
         return $this->_class;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getHandler(): string
     {
         return $this->_handler;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function extractParams(string $uri): array
     {
+        $keyRegexp = preg_replace('/{[a-z]+}/', '{.+}', $this->_pattern);
+        $keyRegexp = str_replace('/', '\/', $keyRegexp);
+        preg_match('/'.$keyRegexp.'/', $this->_pattern, $keys);
+        $valueRegexp = preg_replace('/{[a-z]+}/', '.+', $this->_pattern);
+        $valueRegexp = str_replace('/', '\/', $valueRegexp);
+        preg_match('/'.$valueRegexp.'/', $uri, $values);
+        $result = [];
+        foreach ($keys as $key => $value) {
+            if ($key == 0) {
+                continue;
+            }
+            $result[$key] = $values[$key];
+        }
+        return $result;
+    }
 
+    /**
+     * @return string
+     */
+    public function getMethod(): string
+    {
+        return $this->_method;
     }
 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace webhelper\interfaces\routing;
+namespace lindal\webhelper\interfaces\routing;
 
 
-use webhelper\errors\NotFoundException;
-use webhelper\interfaces\IRequest;
+use lindal\webhelper\errors\NotFoundException;
+use lindal\webhelper\interfaces\IRequest;
 
 interface IRouter
 {
