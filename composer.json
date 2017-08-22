@@ -14,7 +14,8 @@
   "require": {},
   "autoload": {
     "psr-4": {
-      "lindal\\webhelper\\": "src"
+      "lindal\\webhelper\\": "src",
+      "lindal\\webhelper\\test\\": "tests"
     }
   }
 }

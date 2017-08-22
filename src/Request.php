@@ -4,14 +4,7 @@ namespace lindal\webhelper;
 
 use lindal\webhelper\interfaces\IHeaderCollection;
 use lindal\webhelper\interfaces\IRequest;
-use lindal\webhelper\interfaces\IUploadedFile;
 
-/**
- * Created by PhpStorm.
- * User: lindal
- * Date: 21.08.17
- * Time: 18:01
- */
 class Request implements IRequest
 {
 
@@ -44,10 +37,10 @@ class Request implements IRequest
     /**
      * Return GET param by name
      * @param string $name
-     * @param mixed|null $default Return this value if param doesn't exist
+     * @param mixed $default Return this value if param doesn't exist
      * @return mixed
      */
-    public function get(string $name, mixed $default = null): mixed
+    public function get(string $name, $default = null)
     {
         $params = array_merge($_GET, $this->_get);
         return $params[$name] ?? $default;
@@ -82,7 +75,7 @@ class Request implements IRequest
      * @param mixed|null $default Return this value if param doesn't exist
      * @return mixed
      */
-    public function post(string $name, mixed $default = null): mixed
+    public function post(string $name, $default = null)
     {
         $params = array_merge($_POST, $this->_post);
         return $params[$name] ?? $default;

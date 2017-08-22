@@ -1,38 +1,103 @@
 <?php
+use lindal\webhelper\routing\Rule;
+use lindal\webhelper\test\TestController;
 
-/**
- * Created by PhpStorm.
- * User: lindal
- * Date: 21.08.17
- * Time: 22:07
- */
 class RuleTest extends \PHPUnit\Framework\TestCase
 {
 
-    public $rule;
-
-    public function setUp()
+    /**
+     * @dataProvider matchProvider
+     * @param $pattern
+     * @param $uri
+     * @param $expected
+     */
+    public function testMatch($pattern, $uri, $expected)
     {
-        $this->rule = new \lindal\webhelper\routing\Rule(
+        $rule = new Rule(
+            'Someclass',
+            'execute',
+            $pattern,
+            'GET'
+        );
+        $this->assertEquals($rule->match($uri), $expected);
+    }
+
+    public function matchProvider()
+    {
+        return [
+            ['/user/{id}', '/user', false],
+            ['/user/{id}', '/user/32', true],
+            ['/user/{id}', '/user/32/', false],
+            ['/user/{id}', '/user/32/asdf', false],
+            ['/user/{id}/test', '/user/32/test', true],
+            ['/user/{id}/test', '/user/32/invalidtest', false],
+            ['/user/{id}/test/{re}', '/user/32/test/31', true],
+            ['/user/{id}/test/{re}', '/user/32/test/', false],
+            ['/user', '/user', true],
+            ['/user', '/user/32', false],
+        ];
+    }
+
+    /**
+     * @dataProvider extractProvider
+     * @param $pattern
+     * @param $uri
+     * @param $params
+     */
+    public function testExtractParams($pattern, $uri, $params)
+    {
+        $rule = new Rule(
             'Someclass',
             'handler',
+            $pattern,
+            'GET'
+        );
+        $this->assertEquals($rule->extractParams($uri), $params);
+    }
+
+    public function extractProvider()
+    {
+        return [
+            ['/user/{id}', '/user/32', ['id' => 32]],
+            ['/user/{product}', '/user/32', ['product' => 32]],
+            ['/user/{id}/test/{test}', '/user/32/test/test', ['id' => 32, 'test' => 'test']],
+            ['/user/{id}/test', '/user/32/test/test', ['id' => 32]],
+        ];
+    }
+
+    public function testGetClass()
+    {
+        $rule = new Rule(
+            TestController::class,
+            'execute',
             '/user/{id}',
             'GET'
         );
+
+        $this->assertEquals($rule->getClass(), TestController::class);
     }
 
-    public function testMatch()
+    public function testGetHandler()
     {
-        $validUri = '/user/43';
-        $invalidUri = '/user/43/dsa';
-        $this->assertTrue($this->rule->match($validUri));
-        $this->assertFalse($this->rule->match($invalidUri));
+        $rule = new Rule(
+            TestController::class,
+            'execute',
+            '/user/{id}',
+            'GET'
+        );
+
+        $this->assertEquals($rule->getHandler(), 'execute');
     }
 
-    public function testExtractParams()
+    public function testGetMethod()
     {
-        $uri = '/user/43';
-        $params = $this->rule->extractParams($uri);
-        $this->assertEquals(['id' => 43], $params);
+        $rule = new Rule(
+            TestController::class,
+            'execute',
+            '/user/{id}',
+            'POST'
+        );
+
+        $this->assertEquals($rule->getMethod(), 'POST');
     }
 }

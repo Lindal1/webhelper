@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lindal
- * Date: 21.08.17
- * Time: 18:28
- */
 
 namespace lindal\webhelper;
-
 
 use lindal\webhelper\interfaces\IUploadedFile;
 

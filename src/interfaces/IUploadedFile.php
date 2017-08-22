@@ -2,7 +2,6 @@
 
 namespace lindal\webhelper\interfaces;
 
-
 interface IUploadedFile
 {
 

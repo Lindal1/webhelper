@@ -7,12 +7,6 @@ use lindal\webhelper\interfaces\IRequest;
 use lindal\webhelper\interfaces\routing\IRouter;
 use lindal\webhelper\interfaces\routing\IRule;
 
-/**
- * Created by PhpStorm.
- * User: lindal
- * Date: 21.08.17
- * Time: 18:38
- */
 class Router implements IRouter
 {
 
@@ -43,17 +37,6 @@ class Router implements IRouter
     }
 
     /**
-     * Set rule for default uri
-     * @param IRule $rule
-     * @return IRouter
-     */
-    public function setDefaultRule(IRule $rule): IRouter
-    {
-        $this->_defaultRule = $rule;
-        return $this;
-    }
-
-    /**
      * Set new routing rule
      * @param IRule $rule
      * @return IRouter
@@ -79,7 +62,7 @@ class Router implements IRouter
                 foreach ((array)$params as $name => $value) {
                     $this->_request->setGetParam($name, $value);
                 }
-                $class = new ($rule->getClass());
+                $class = new $rule->getClass();
                 call_user_func([$class, $rule->getHandler()]);
                 return;
             }

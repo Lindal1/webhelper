@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lindal
- * Date: 21.08.17
- * Time: 19:07
- */
 
 namespace lindal\webhelper\routing;
-
 
 use lindal\webhelper\interfaces\routing\IRule;
 
@@ -39,9 +32,9 @@ class Rule implements IRule
      */
     public function match(string $uri)
     {
-        $regexp = preg_replace('/{[a-z]+}/', '.+', $this->_pattern);
+        $regexp = preg_replace('/{[a-z]+}/', '[^/]+', $this->_pattern);
         $regexp = str_replace('/', '\/', $regexp);
-        return (bool)preg_match('/' . $regexp . '/', $uri);
+        return (bool)preg_match('/' . $regexp . '$/', $uri);
     }
 
     /**
@@ -65,18 +58,18 @@ class Rule implements IRule
      */
     public function extractParams(string $uri): array
     {
-        $keyRegexp = preg_replace('/{[a-z]+}/', '{.+}', $this->_pattern);
+        $keyRegexp = preg_replace('/{[a-z]+}/', '{(.+)}', $this->_pattern);
         $keyRegexp = str_replace('/', '\/', $keyRegexp);
-        preg_match('/'.$keyRegexp.'/', $this->_pattern, $keys);
-        $valueRegexp = preg_replace('/{[a-z]+}/', '.+', $this->_pattern);
+        preg_match('/' . $keyRegexp . '/', $this->_pattern, $keys);
+        $valueRegexp = preg_replace('/{[a-z]+}/', '([^/]+)', $this->_pattern);
         $valueRegexp = str_replace('/', '\/', $valueRegexp);
-        preg_match('/'.$valueRegexp.'/', $uri, $values);
+        preg_match('/' . $valueRegexp . '/', $uri, $values);
         $result = [];
         foreach ($keys as $key => $value) {
             if ($key == 0) {
                 continue;
             }
-            $result[$key] = $values[$key];
+            $result[$value] = $values[$key];
         }
         return $result;
     }
