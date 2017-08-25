@@ -60,10 +60,11 @@ class Router implements IRouter
             if ($rule->getMethod() != $this->_request->getMethod()) {
                 continue;
             }
-            if ($this->match($this->_request->getUri(), $this->_request->getMethod())) {
+            if ($rule->match($this->_request->getUri())) {
                 $params = $rule->extractParams($this->_request->getUri());
-                $class = new $rule->getClass();
-                call_user_func([$class, $rule->getHandler()], $this->_request, $this->_response, $params);
+                $className = $rule->getClass();
+                $object = new $className;
+                call_user_func([$object, $rule->getHandler()], $this->_request, $this->_response, $params);
                 return;
             }
         }

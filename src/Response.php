@@ -78,7 +78,7 @@ class Response implements IResponse
     /**
      * Send response to user
      */
-    public function send(): void
+    public function send()
     {
         $this->sendHeaders();
         echo $this->_body;

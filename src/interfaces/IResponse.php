@@ -40,7 +40,7 @@ interface IResponse
     /**
      * Send response to user
      */
-    public function send(): void;
+    public function send();
 
     /**
      * Set status code to response
