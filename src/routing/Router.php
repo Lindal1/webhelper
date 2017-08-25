@@ -4,6 +4,7 @@ namespace lindal\webhelper\routing;
 
 use lindal\webhelper\errors\NotFoundException;
 use lindal\webhelper\interfaces\IRequest;
+use lindal\webhelper\interfaces\IResponse;
 use lindal\webhelper\interfaces\routing\IRouter;
 use lindal\webhelper\interfaces\routing\IRule;
 
@@ -16,23 +17,25 @@ class Router implements IRouter
     private $_request;
 
     /**
+     * @var IResponse
+     */
+    private $_response;
+
+    /**
      * @var IRule[]
      */
     private $_rules = [];
 
     /**
-     * @var IRule
-     */
-    private $_defaultRule;
-
-    /**
      * Router constructor.
-     * @param IRule[] $rules
      * @param IRequest $request
+     * @param IResponse $response
+     * @param IRule[] $rules
      */
-    public function __construct(array $rules = [], IRequest $request)
+    public function __construct(IRequest $request, IResponse $response, array $rules = [])
     {
         $this->_request = $request;
+        $this->_response = $response;
         $this->_rules = $rules;
     }
 
@@ -59,11 +62,8 @@ class Router implements IRouter
             }
             if ($this->match($this->_request->getUri(), $this->_request->getMethod())) {
                 $params = $rule->extractParams($this->_request->getUri());
-                foreach ((array)$params as $name => $value) {
-                    $this->_request->setGetParam($name, $value);
-                }
                 $class = new $rule->getClass();
-                call_user_func([$class, $rule->getHandler()]);
+                call_user_func([$class, $rule->getHandler()], $this->_request, $this->_response, $params);
                 return;
             }
         }
