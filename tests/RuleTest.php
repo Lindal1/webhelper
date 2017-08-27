@@ -35,6 +35,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
             ['/user/{id}/test/{re}', '/user/32/test/', false],
             ['/user', '/user', true],
             ['/user', '/user/32', false],
+            ['/user', '/user?someParam', true],
         ];
     }
 
@@ -99,5 +100,33 @@ class RuleTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->assertEquals($rule->getMethod(), 'POST');
+    }
+
+    /**
+     * @dataProvider providerForRemoveParams
+     * @param $uri
+     * @param $expectedUri
+     */
+    public function testRemoveGetParamsFromUri($uri, $expectedUri)
+    {
+        $rule = new Rule(
+            TestController::class,
+            'execute',
+            '/user/{id}',
+            'POST'
+        );
+        echo $rule->removeGetParamsFromUri($uri);
+        $this->assertTrue($rule->removeGetParamsFromUri($uri) == $expectedUri);
+    }
+
+    public function providerForRemoveParams()
+    {
+        return [
+            ['/user', '/user'],
+            ['/user?som=1', '/user'],
+            ['/user?som', '/user'],
+            ['/user/add?som', '/user/add'],
+            ['/user/add', '/user/add'],
+        ];
     }
 }

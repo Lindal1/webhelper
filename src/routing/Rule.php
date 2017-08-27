@@ -32,6 +32,7 @@ class Rule implements IRule
      */
     public function match(string $uri)
     {
+        $uri = $this->removeGetParamsFromUri($uri);
         $regexp = preg_replace('/{[a-z]+}/', '[^/]+', $this->_pattern);
         $regexp = str_replace('/', '\/', $regexp);
         return (bool)preg_match('/' . $regexp . '$/', $uri);
@@ -58,6 +59,7 @@ class Rule implements IRule
      */
     public function extractParams(string $uri): array
     {
+        $uri = $this->removeGetParamsFromUri($uri);
         $keyRegexp = preg_replace('/{[a-z]+}/', '{(.+)}', $this->_pattern);
         $keyRegexp = str_replace('/', '\/', $keyRegexp);
         preg_match('/' . $keyRegexp . '/', $this->_pattern, $keys);
@@ -80,5 +82,15 @@ class Rule implements IRule
     public function getMethod(): string
     {
         return $this->_method;
+    }
+
+    public function removeGetParamsFromUri(string $uri)
+    {
+        $pos = strpos($uri, '?');
+        if ($pos !== false) {
+            $length = strpos($uri, '?') ? strpos($uri, '?') : null;
+            return substr($uri, 0, $length);
+        }
+        return $uri;
     }
 }
