@@ -54,4 +54,11 @@ interface IResponse
      * @return int
      */
     public function getCode(): int;
+
+    /**
+     * Redirect to url
+     * @param string $url
+     * @return null
+     */
+    public function redirect(string $url);
 }

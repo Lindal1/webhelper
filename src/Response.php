@@ -153,4 +153,13 @@ class Response implements IResponse
         }
     }
 
+    /**
+     * Redirect to url
+     * @param string $url
+     * @return null
+     */
+    public function redirect(string $url)
+    {
+        header('Location: ' . $url);
+    }
 }
