@@ -19,11 +19,11 @@ interface IRequest
 
     /**
      * Return GET param by name
-     * @param string $name
+     * @param string|null $name If not set return all GET params
      * @param mixed $default Return this value if param doesn't exist
      * @return mixed
      */
-    public function get(string $name, $default = null);
+    public function get($name = null, $default = null);
 
     /**
      * Set GET param to request
@@ -43,11 +43,11 @@ interface IRequest
 
     /**
      * Return POST param by name
-     * @param string $name
+     * @param string|null $name IF not set return all POST params
      * @param mixed|null $default Return this value if param doesn't exist
      * @return mixed
      */
-    public function post(string $name, $default = null);
+    public function post($name = null, $default = null);
 
     /**
      * Return request headers

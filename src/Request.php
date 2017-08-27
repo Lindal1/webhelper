@@ -36,13 +36,16 @@ class Request implements IRequest
 
     /**
      * Return GET param by name
-     * @param string $name
+     * @param string|null $name
      * @param mixed $default Return this value if param doesn't exist
      * @return mixed
      */
-    public function get(string $name, $default = null)
+    public function get($name = null, $default = null)
     {
         $params = array_merge($_GET, $this->_get);
+        if (!$name) {
+            return $params;
+        }
         return $params[$name] ?? $default;
     }
 
@@ -71,13 +74,16 @@ class Request implements IRequest
 
     /**
      * Return POST param by name
-     * @param string $name
+     * @param string|null $name
      * @param mixed|null $default Return this value if param doesn't exist
      * @return mixed
      */
-    public function post(string $name, $default = null)
+    public function post($name = null, $default = null)
     {
         $params = array_merge($_POST, $this->_post);
+        if (!$name) {
+            return $params;
+        }
         return $params[$name] ?? $default;
     }
 
