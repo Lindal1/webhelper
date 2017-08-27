@@ -19,6 +19,7 @@ class Response implements IResponse
     private $_headers;
     private $_body;
     private $_code = 200;
+    private $statusText = 'OK';
 
     /**
      * Return singleton instance
@@ -112,6 +113,8 @@ class Response implements IResponse
         if (headers_sent()) {
             return;
         }
+        $statusCode = $this->getCode();
+        header("HTTP/1.1 {$statusCode} {$this->statusText}");
         if ($this->_headers) {
             $headers = $this->getHeaders();
             foreach ($headers as $name => $values) {
@@ -124,8 +127,6 @@ class Response implements IResponse
                 }
             }
         }
-        $statusCode = $this->getStatusCode();
-        header("HTTP/{$this->version} {$statusCode} {$this->statusText}");
         $this->sendCookies();
     }
 
@@ -161,5 +162,23 @@ class Response implements IResponse
     public function redirect(string $url)
     {
         header('Location: ' . $url);
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatusText(): string
+    {
+        return $this->getStatusText();
+    }
+
+    /**
+     * @param string $text
+     * @return IResponse
+     */
+    public function setStatusText(string $text): IResponse
+    {
+        $this->statusText = $text;
+        return $this;
     }
 }

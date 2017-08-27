@@ -61,4 +61,15 @@ interface IResponse
      * @return null
      */
     public function redirect(string $url);
+
+    /**
+     * @return string
+     */
+    public function getStatusText(): string;
+
+    /**
+     * @param string $text
+     * @return IResponse
+     */
+    public function setStatusText(string $text): IResponse;
 }
