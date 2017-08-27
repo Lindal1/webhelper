@@ -19,7 +19,8 @@ class Response implements IResponse
     private $_headers;
     private $_body;
     private $_code = 200;
-    private $statusText = 'OK';
+    private $_statusText = 'OK';
+    private $_cookies = [];
 
     /**
      * Return singleton instance
@@ -82,6 +83,7 @@ class Response implements IResponse
     public function send()
     {
         $this->sendHeaders();
+        $this->sendCookies();
         echo $this->_body;
     }
 
@@ -114,7 +116,7 @@ class Response implements IResponse
             return;
         }
         $statusCode = $this->getCode();
-        header("HTTP/1.1 {$statusCode} {$this->statusText}");
+        header("HTTP/1.1 {$statusCode} {$this->_statusText}");
         if ($this->_headers) {
             $headers = $this->getHeaders();
             foreach ($headers as $name => $values) {
@@ -138,19 +140,9 @@ class Response implements IResponse
         if ($this->_cookies === null) {
             return;
         }
-        $request = Yii::$app->getRequest();
-        if ($request->enableCookieValidation) {
-            if ($request->cookieValidationKey == '') {
-                throw new InvalidConfigException(get_class($request) . '::cookieValidationKey must be configured with a secret key.');
-            }
-            $validationKey = $request->cookieValidationKey;
-        }
-        foreach ($this->getCookies() as $cookie) {
-            $value = $cookie->value;
-            if ($cookie->expire != 1 && isset($validationKey)) {
-                $value = Yii::$app->getSecurity()->hashData(serialize([$cookie->name, $value]), $validationKey);
-            }
-            setcookie($cookie->name, $value, $cookie->expire, $cookie->path, $cookie->domain, $cookie->secure, $cookie->httpOnly);
+        foreach ($this->getCookies() as $name => $cookie) {
+            $value = $cookie['value'];
+            setcookie($name, $value, $cookie['expire'], $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['httpOnly']);
         }
     }
 
@@ -178,7 +170,38 @@ class Response implements IResponse
      */
     public function setStatusText(string $text): IResponse
     {
-        $this->statusText = $text;
+        $this->_statusText = $text;
         return $this;
+    }
+
+    /**
+     * @param string $name
+     * @param string $value
+     * @param $expire
+     * @param string $path
+     * @param string $domain
+     * @param bool $secure
+     * @param bool $httpOnly
+     * @return IResponse
+     */
+    public function setCookies(string $name, string $value, $expire = null, $path = null, $domain = null, bool $secure = false, bool $httpOnly = true): IResponse
+    {
+        $this->_cookies[$name] = [
+            'value' => $value,
+            'expire' => $expire,
+            'path' => $path,
+            'domain' => $domain,
+            'secure' => $secure,
+            'httpOnly' => $httpOnly
+        ];
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCookies(): array
+    {
+        return $this->_cookies;
     }
 }

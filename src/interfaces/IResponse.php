@@ -72,4 +72,21 @@ interface IResponse
      * @return IResponse
      */
     public function setStatusText(string $text): IResponse;
+
+    /**
+     * @param string $name
+     * @param string $value
+     * @param null $expire
+     * @param null $path
+     * @param null $domain
+     * @param bool $secure
+     * @param bool $httpOnly
+     * @return IResponse
+     */
+    public function setCookies(string $name, string $value, $expire = null, $path = null, $domain = null, bool $secure = false, bool $httpOnly = true): IResponse;
+
+    /**
+     * @return array
+     */
+    public function getCookies(): array;
 }
