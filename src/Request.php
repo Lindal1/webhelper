@@ -127,10 +127,14 @@ class Request implements IRequest
         foreach ($_FILES as $name => $data) {
             if (is_array($data['name'])) {
                 foreach ($this->diverseArray($data) as $file) {
-                    $result[$name][] = new UploadedFile($file);
+                    if ($file['name'] && $file['tmp_name'] && $file['size']) {
+                        $result[$name][] = new UploadedFile($file);
+                    }
                 }
             } else {
-                $result[$name] = new UploadedFile($data);
+                if ($data['name'] && $data['tmp_name'] && $data['size']) {
+                    $result[$name] = new UploadedFile($data);
+                }
             }
         }
         return $result;
