@@ -14,17 +14,17 @@ class Router implements IRouter
     /**
      * @var IRequest
      */
-    private $_request;
+    protected $_request;
 
     /**
      * @var IResponse
      */
-    private $_response;
+    protected $_response;
 
     /**
      * @var IRule[]
      */
-    private $_rules = [];
+    protected $_rules = [];
 
     /**
      * Router constructor.
